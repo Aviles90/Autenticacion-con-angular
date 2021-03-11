@@ -25,13 +25,9 @@ export class AuthService {
     const body = { name, email, password}
     return this.http.post<AuthResponse>( url, body )
     .pipe(
-      tap( resp => {
-        if ( resp.ok ) {
-          localStorage.setItem('token', resp.token! )
-          this._usuario = {
-            name: resp.name!,
-            uid: resp.uid!
-          }
+      tap( ({ok, token}) => {
+        if ( ok ) {
+          localStorage.setItem('token', token! )
         }     
       }),
       map( resp => resp.ok ), //responsemos unicamente el valor booleano del ok
@@ -48,10 +44,6 @@ export class AuthService {
       tap( resp => {
         if ( resp.ok ) {
           localStorage.setItem('token', resp.token! )
-          this._usuario = {
-            name: resp.name!,
-            uid: resp.uid!
-          }
         }     
       }),
       map( resp => resp.ok ),
@@ -70,10 +62,11 @@ export class AuthService {
                     .pipe(
                       map( resp => {
                         console.log(resp.token);                        
-                        localStorage.setItem('token', resp.token! )
+                        localStorage.setItem('token', resp.token! );
                         this._usuario = {
                           name: resp.name!,
-                          uid: resp.uid!
+                          uid: resp.uid!,
+                          email: resp.email!
                         }
                         return resp.ok;
                       }),
