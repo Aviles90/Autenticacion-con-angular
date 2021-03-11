@@ -35,7 +35,7 @@ export class AuthService {
         }     
       }),
       map( resp => resp.ok ),
-      catchError( err => of(false) ) //capturamos el error enviado desde el backend
+      catchError( err => of(err.error.msg) ) //capturamos el error enviado desde el backend
     );
   }
 }
