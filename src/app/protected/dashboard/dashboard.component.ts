@@ -21,7 +21,8 @@ export class DashboardComponent {
               private autService : AuthService) { }
 
   logout(){
-    this.router.navigateByUrl('/auth/login')
+    this.router.navigateByUrl('/auth')
+    this.autService.logout();
   }
 
 }

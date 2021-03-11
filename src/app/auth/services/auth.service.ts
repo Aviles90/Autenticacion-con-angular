@@ -20,6 +20,25 @@ export class AuthService {
 
   constructor( private http : HttpClient ) { }
 
+  registro( name : string, email : string, password : string){
+    const url : string = `${this.baseUrl}/auth/new`;
+    const body = { name, email, password}
+    return this.http.post<AuthResponse>( url, body )
+    .pipe(
+      tap( resp => {
+        if ( resp.ok ) {
+          localStorage.setItem('token', resp.token! )
+          this._usuario = {
+            name: resp.name!,
+            uid: resp.uid!
+          }
+        }     
+      }),
+      map( resp => resp.ok ), //responsemos unicamente el valor booleano del ok
+      catchError( err => of(err.error.msg) ) //capturamos el error enviado desde el backend
+    );
+  }
+
   login(email: string, password: string){
     const url : string = `${this.baseUrl}/auth`;
     const body = { email, password}
@@ -61,5 +80,10 @@ export class AuthService {
                       catchError( err => of(false) )
                     )
 
+  }
+
+  logout(){
+    // localStorage.removeItem('token');
+    localStorage.clear();
   }
 }
