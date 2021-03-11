@@ -21,16 +21,20 @@ export class LoginComponent {
               private authService: AuthService) { }
 
   login(){
-    console.log(this.miFormulario.value);
-    console.log(this.miFormulario.valid);
+    // console.log(this.miFormulario.value);
+    // console.log(this.miFormulario.valid);
 
     const { email, password } = this.miFormulario.value;
 
     this.authService.login(email, password)
-                    .subscribe( resp => {
-                      console.log(resp);
-                      
+                    .subscribe( ok => {
+                      // console.log(ok);
+                      if ( ok ) {                        
+                        this.router.navigateByUrl('/dashboard') 
+                      }else{
+                        //TODO: Mostar mensaje de error
+                        
+                      }                      
                     })
-    // this.router.navigateByUrl('/dashboard') 
   }
 }
